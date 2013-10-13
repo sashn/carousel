@@ -27,12 +27,12 @@ var carousel = {
 
 	},
 	$items: {},
-	positionCss: {},
+	positionCss: [],
 	visibleItemIndices: [],
 
 	init: function(options) {
 		this.initConfiguration(options);
-		this.calculateCarouselPositionCss();
+		this.initCarouselPositionCss();
 		this.adjustItemPositions();
 		this.initControls();
 	},
@@ -50,35 +50,44 @@ var carousel = {
 		};
 	},
 
-	calculateCarouselPositionCss: function() {
+	initCarouselPositionCss: function() {
 		var o = this.options
-		,	width
-		,	height
-		,	top
-		,	left;
+		,	width = 0
+		,	height = 0
+		,	top = 0
+		,	left = 0
+		,	positionCss = this.positionCss
+		,	pushPositionCss = function(sizeFactor) {
+				width = sizeFactor * o.itemDefaultWidth;
+				height = sizeFactor * o.itemDefaultHeight;
+				top = (o.itemDefaultHeight - height) / 2;
+				positionCss.push({
+					'width': width,
+					'height': height,
+					'top': top,
+					'left': left,
+					'z-index': sizeFactor*100
+				});
+				left += width;
+			};
 
-		for (var i = 0; i < o.visibleItemCount; i++) {
-			width = o.visibleItemScale[i] * o.itemDefaultWidth;
-			height = o.visibleItemScale[i] * o.itemDefaultHeight;
-			top = (o.itemDefaultHeight - height) / 2;
-			left = 0;
-			for (var j = 0; j < i; j++) {
-				left += this.positionCss[j].width;
-			};
-			this.positionCss[i] = {
-				'width': width,
-				'height': height,
-				'top': top,
-				'left': left,
-				'z-index': o.visibleItemScale[i]*100
-			};
+
+		//push css for left vanishing state
+		pushPositionCss(0);
+
+		//push css for left vanishing state
+		for (var i = 0, visibleItemCount = o.visibleItemScale.length; i < visibleItemCount; i++) {
+			pushPositionCss(o.visibleItemScale[i]);
 		};
+
+		//push css for right vanishing state
+		pushPositionCss(0);
 	},
 	adjustItemPositions: function() {
 		this.determineVisibleItemIndices();
 		this.$items.hide();
 		for (var i = this.visibleItemIndices.length - 1; i >= 0; i--) {
-			this.$items.eq(this.visibleItemIndices[i]).css(this.positionCss[i]).show()
+			this.$items.eq(this.visibleItemIndices[i]).css(this.positionCss[i]).show();
 		};
 	},
 	initControls: function() {
@@ -130,7 +139,7 @@ var carousel = {
 
 	calculateOptions: {
 		visibleItemCount: function(self) {
-			var visibleItemCount = self.options.visibleItemScale.length;
+			var visibleItemCount = self.options.visibleItemScale.length +2; //add 2 for vanishing states
 			// if (visibleItemCount%2 == 0) {
 			// 	throw "number of visible items should be uneven!";
 			// }
