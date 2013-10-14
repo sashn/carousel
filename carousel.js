@@ -18,21 +18,24 @@ var carousel = {
 		'btnRightSelector': '.js-carousel-btn-right',
 
 		'visibleItemCount': null,
-		'visibleItemScale': [0.5, 0.7, 1.0, 0.7, 0.5],
+		'visibleItemScale': [0, 0.5, 0.7, 1.0, 0.7, 0.5, 0],
 		'itemDefaultWidth': null,
 		'itemDefaultHeight': null,
 		'centerItemIndex': null,
-		'defaultCenterItemIndex': null
+		'defaultCenterItemIndex': null,
+		'subPositionCount': 8
 		
 
 	},
 	$items: {},
 	positionCss: [],
+	subPositionCss: [],
 	visibleItemIndices: [],
 
 	init: function(options) {
 		this.initConfiguration(options);
 		this.initCarouselPositionCss();
+		this.initSubPositionCss();
 		this.adjustItemPositions();
 		this.initControls();
 	},
@@ -71,18 +74,44 @@ var carousel = {
 				left += width;
 			};
 
-
-		//push css for left vanishing state
-		pushPositionCss(0);
-
-		//push css for left vanishing state
 		for (var i = 0, visibleItemCount = o.visibleItemScale.length; i < visibleItemCount; i++) {
 			pushPositionCss(o.visibleItemScale[i]);
 		};
-
-		//push css for right vanishing state
-		pushPositionCss(0);
 	},
+
+	initSubPositionCss: function() {
+		var o = this.options
+		,	width = 0
+		,	height = 0
+		,	top = 0
+		,	left = 0
+		,	cssObjects
+		,	subPositionSizeFactor;
+
+		for (var i = 0; i < o.visibleItemCount-1; i++) {
+
+			width = this.positionCss[i+1].width - this.positionCss[i].width;
+			height = this.positionCss[i+1].height - this.positionCss[i].height;
+			top = this.positionCss[i+1].top - this.positionCss[i].top;
+			left = this.positionCss[i+1].left - this.positionCss[i].left;
+			zIndex = this.positionCss[i+1]['z-index'] - this.positionCss[i]['z-index'];
+
+			cssObjects = [];
+			for (var j = 0; j < o.subPositionCount; j++) {
+				subPositionSizeFactor = j/o.subPositionCount;
+				cssObjects.push({
+					'width': this.positionCss[i].width + width * subPositionSizeFactor,
+					'height': this.positionCss[i].height + height * subPositionSizeFactor,
+					'top': this.positionCss[i].top + top * subPositionSizeFactor,
+					'left': this.positionCss[i].left + left * subPositionSizeFactor,
+					'z-index': this.positionCss[i]['z-index'] + zIndex * subPositionSizeFactor
+				});
+			};
+			this.subPositionCss.push(cssObjects);
+		};
+
+	},
+
 	adjustItemPositions: function() {
 		this.determineVisibleItemIndices();
 		this.$items.hide();
@@ -139,7 +168,7 @@ var carousel = {
 
 	calculateOptions: {
 		visibleItemCount: function(self) {
-			var visibleItemCount = self.options.visibleItemScale.length +2; //add 2 for vanishing states
+			var visibleItemCount = self.options.visibleItemScale.length;
 			// if (visibleItemCount%2 == 0) {
 			// 	throw "number of visible items should be uneven!";
 			// }
