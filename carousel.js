@@ -115,7 +115,7 @@ var carousel = {
 	adjustItemPositions: function() {
 		this.determineVisibleItemIndices();
 		this.$items.hide();
-		for (var i = this.visibleItemIndices.length - 1; i >= 0; i--) {
+		for (var i = 0; i < this.options.visibleItemCount; i++) {
 			this.$items.eq(this.visibleItemIndices[i]).css(this.positionCss[i]).show();
 		};
 	},
@@ -134,10 +134,10 @@ var carousel = {
 	},
 
 	cycleLeft: function(carousel) {
-		carousel.cycleCarousel(-1);
+		this.cycleCarousel(-1);
 	},
 	cycleRight: function(carousel) {
-		carousel.cycleCarousel(1);
+		this.cycleCarousel(1);
 	},
 	cycleCarousel: function(delta) {
 		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
@@ -147,7 +147,7 @@ var carousel = {
 
 	determineVisibleItemIndices: function() {
 		var o = this.options;
-
+		
 		this.visibleItemIndices = [];
 		for (var i = 0; i < o.visibleItemCount; i++) {
 			var index = this.adjustIndex(o.centerItemIndex + i - o.defaultCenterItemIndex);
@@ -165,6 +165,29 @@ var carousel = {
 		}
 		return index;
 	},
+
+
+	// adjustItemPositions: function(delta) {
+	// 	var o = this.options;
+
+	// 	for (var i = 0; i < o.subPositionCount; i++) {
+	// 		for (var j = 0; j < o.visibleItemCount; j++) {
+
+	// 			if (j+delta < 0 || j+delta >= this.subPositionCss.length) {
+	// 				this.$items.eq(this.visibleItemIndices[j]).hide();
+	// 			} else {
+	// 				this.$items.eq(this.visibleItemIndices[j]).css(this.subPositionCss[j][i]);
+	// 			}
+
+	// 		};
+	// 	};
+
+
+
+
+		
+	// },
+
 
 	calculateOptions: {
 		visibleItemCount: function(self) {
