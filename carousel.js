@@ -143,6 +143,7 @@ var carousel = {
 		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
 		this.determineVisibleItemIndices();
 		this.adjustItemPositions();
+		// this.nextTick();
 	},
 
 	determineVisibleItemIndices: function() {
@@ -167,25 +168,31 @@ var carousel = {
 	},
 
 
-	// adjustItemPositions: function(delta) {
+
+	// x: 0,
+	// myTimeout: null,
+	// nextTick: function(pos) {
+
 	// 	var o = this.options;
 
-	// 	for (var i = 0; i < o.subPositionCount; i++) {
-	// 		for (var j = 0; j < o.visibleItemCount; j++) {
+	// 	if (this.x >= o.subPositionCount) {
+	// 		this.x = 0;
+	// 		clearTimeout(this.myTimeout);
+	// 	} else {
 
-	// 			if (j+delta < 0 || j+delta >= this.subPositionCss.length) {
-	// 				this.$items.eq(this.visibleItemIndices[j]).hide();
-	// 			} else {
-	// 				this.$items.eq(this.visibleItemIndices[j]).css(this.subPositionCss[j][i]);
-	// 			}
+	// 		this.$items.eq(this.visibleItemIndices[0]).hide();
+	// 		this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]).show();
+
+	// 		for (var i = 1; i < o.visibleItemCount; i++) {
+
+	// 			this.$items.eq(this.visibleItemIndices[i]).css(this.subPositionCss[i-1][o.subPositionCount -this.x -1]);
 
 	// 		};
-	// 	};
-
-
-
-
-		
+	// 		this.x += 1;
+	// 		this.myTimeout = setTimeout(function() {
+	// 			carousel.nextTick();
+	// 		}, 100);
+	// 	}
 	// },
 
 
