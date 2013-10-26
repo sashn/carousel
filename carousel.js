@@ -134,16 +134,18 @@ var carousel = {
 	},
 
 	cycleLeft: function(carousel) {
+		this.direction = "right";
 		this.cycleCarousel(-1);
 	},
 	cycleRight: function(carousel) {
+		this.direction = "left";
 		this.cycleCarousel(1);
 	},
 	cycleCarousel: function(delta) {
-		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
-		this.determineVisibleItemIndices();
-		this.adjustItemPositions();
-		// this.nextTick();
+		// this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
+		// this.determineVisibleItemIndices();
+		// this.adjustItemPositions();
+		this.animate();
 	},
 
 	determineVisibleItemIndices: function() {
@@ -169,31 +171,76 @@ var carousel = {
 
 
 
-	// x: 0,
-	// myTimeout: null,
-	// nextTick: function(pos) {
+	x: 0,
+	myTimeout: null,
+	$itemsToAnimate: [],
+	direction: null,
+	animate: function() {
 
-	// 	var o = this.options;
+		var o = this.options;
 
-	// 	if (this.x >= o.subPositionCount) {
-	// 		this.x = 0;
-	// 		clearTimeout(this.myTimeout);
-	// 	} else {
 
-	// 		this.$items.eq(this.visibleItemIndices[0]).hide();
-	// 		this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]).show();
+		//stuff to do before animation starts
+		if (this.$itemsToAnimate.length <= 0) {
 
-	// 		for (var i = 1; i < o.visibleItemCount; i++) {
+			//show and hide items on the far left and right side
+			// this.$items.eq(this.visibleItemIndices[0]).hide();
+			// this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]).show();
 
-	// 			this.$items.eq(this.visibleItemIndices[i]).css(this.subPositionCss[i-1][o.subPositionCount -this.x -1]);
+			var directionModifier = (this.direction == "left" ? 1 : 0);
+			for (var i = 0; i < o.visibleItemCount -1; i++) {
+				this.$itemsToAnimate.push(this.$items.eq(this.visibleItemIndices[i+directionModifier]));
+			};
+		}
 
-	// 		};
-	// 		this.x += 1;
-	// 		this.myTimeout = setTimeout(function() {
-	// 			carousel.nextTick();
-	// 		}, 100);
-	// 	}
-	// },
+		if (this.x >= o.subPositionCount) {
+			this.x = 0;
+			this.$itemsToAnimate = [];
+			clearTimeout(this.myTimeout);
+		} else {
+
+
+			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
+				if (this.direction == "left") {
+					this.$itemsToAnimate[i].css(this.subPositionCss[i][o.subPositionCount-1 -this.x]);
+				} else {
+					this.$itemsToAnimate[i].css(this.subPositionCss[i][this.x]);
+				}
+			};
+			this.x += 1;
+			this.myTimeout = setTimeout(function() {
+				carousel.animate();
+			}, 100);
+		}
+	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	calculateOptions: {
