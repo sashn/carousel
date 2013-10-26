@@ -23,14 +23,23 @@ var carousel = {
 		'itemDefaultHeight': null,
 		'centerItemIndex': null,
 		'defaultCenterItemIndex': null,
-		'subPositionCount': 8
-		
+		'subPositionCount': 8,
+		'useAnimation': true
 
 	},
+
 	$items: {},
 	positionCss: [],
 	subPositionCss: [],
 	visibleItemIndices: [],
+
+
+	currentSubPosition: 0,
+	myTimeout: null,
+	$itemsToAnimate: [],
+	direction: null,
+	isCurrentlyBeingAnimated: false,
+
 
 	init: function(options) {
 		this.initConfiguration(options);
@@ -134,19 +143,25 @@ var carousel = {
 	},
 
 	cycleLeft: function(carousel) {
-		// this.cycleCarousel(-1);
-		this.direction = "right";
-		this.animate();
+		if (this.options.useAnimation) {
+			this.direction = "right";
+			this.animate();
+		} else {
+			this.cycleCarousel(-1);
+		}
 	},
 	cycleRight: function(carousel) {
-		// this.cycleCarousel(1);
-		this.direction = "left";
-		this.animate();
+		if (this.options.useAnimation) {
+			this.direction = "left";
+			this.animate();
+		} else {
+			this.cycleCarousel(1);
+		}
 	},
 	cycleCarousel: function(delta) {
-		// this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
-		// this.determineVisibleItemIndices();
-		// this.adjustItemPositions();
+		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
+		this.determineVisibleItemIndices();
+		this.adjustItemPositions();
 	},
 
 	determineVisibleItemIndices: function() {
@@ -172,29 +187,25 @@ var carousel = {
 
 
 
-	x: 0,
-	myTimeout: null,
-	$itemsToAnimate: [],
-	direction: null,
-	isAnimating: false,
+
 
 	animate: function() {
 
 		var o = this.options;
 
-		if (!this.isAnimating) {
+		if (!this.isCurrentlyBeingAnimated) {
 			this.beforeAnimation();
 		}
 
-		if (this.x < o.subPositionCount) {
+		if (this.currentSubPosition < o.subPositionCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (this.direction == "left") {
-					this.$itemsToAnimate[i].css(this.subPositionCss[i][o.subPositionCount-1 -this.x]);
+					this.$itemsToAnimate[i].css(this.subPositionCss[i][o.subPositionCount-1 -this.currentSubPosition]);
 				} else {
-					this.$itemsToAnimate[i].css(this.subPositionCss[i][this.x]);
+					this.$itemsToAnimate[i].css(this.subPositionCss[i][this.currentSubPosition]);
 				}
 			};
-			this.x += 1;
+			this.currentSubPosition += 1;
 			this.myTimeout = setTimeout(function() {
 				carousel.animate();
 			}, 100);
@@ -210,7 +221,7 @@ var carousel = {
 		,	$farLeftItem = this.$items.eq(this.visibleItemIndices[0])
 		,	$farRightItem = this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]);
 
-		this.isAnimating = true;
+		this.isCurrentlyBeingAnimated = true;
 
 		//show and hide items on the far left and right side
 		if (this.direction == "left") {
@@ -231,8 +242,8 @@ var carousel = {
 		var o = this.options
 		,	directionModifier = (this.direction == "left" ? 1 : -1);
 
-		this.isAnimating = false;
-		this.x = 0;
+		this.isCurrentlyBeingAnimated = false;
+		this.currentSubPosition = 0;
 		this.$itemsToAnimate = [];
 		clearTimeout(this.myTimeout);
 
@@ -240,25 +251,6 @@ var carousel = {
 		this.determineVisibleItemIndices();
 		this.adjustItemPositions();
 	},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
