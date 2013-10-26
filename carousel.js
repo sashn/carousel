@@ -134,18 +134,19 @@ var carousel = {
 	},
 
 	cycleLeft: function(carousel) {
+		// this.cycleCarousel(-1);
 		this.direction = "right";
-		this.cycleCarousel(-1);
+		this.animate();
 	},
 	cycleRight: function(carousel) {
+		// this.cycleCarousel(1);
 		this.direction = "left";
-		this.cycleCarousel(1);
+		this.animate();
 	},
 	cycleCarousel: function(delta) {
 		// this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
 		// this.determineVisibleItemIndices();
 		// this.adjustItemPositions();
-		this.animate();
 	},
 
 	determineVisibleItemIndices: function() {
@@ -175,31 +176,17 @@ var carousel = {
 	myTimeout: null,
 	$itemsToAnimate: [],
 	direction: null,
+	isAnimating: false,
+
 	animate: function() {
 
 		var o = this.options;
 
-
-		//stuff to do before animation starts
-		if (this.$itemsToAnimate.length <= 0) {
-
-			//show and hide items on the far left and right side
-			// this.$items.eq(this.visibleItemIndices[0]).hide();
-			// this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]).show();
-
-			var directionModifier = (this.direction == "left" ? 1 : 0);
-			for (var i = 0; i < o.visibleItemCount -1; i++) {
-				this.$itemsToAnimate.push(this.$items.eq(this.visibleItemIndices[i+directionModifier]));
-			};
+		if (!this.isAnimating) {
+			this.beforeAnimation();
 		}
 
-		if (this.x >= o.subPositionCount) {
-			this.x = 0;
-			this.$itemsToAnimate = [];
-			clearTimeout(this.myTimeout);
-		} else {
-
-
+		if (this.x < o.subPositionCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (this.direction == "left") {
 					this.$itemsToAnimate[i].css(this.subPositionCss[i][o.subPositionCount-1 -this.x]);
@@ -211,14 +198,48 @@ var carousel = {
 			this.myTimeout = setTimeout(function() {
 				carousel.animate();
 			}, 100);
+		} else {
+			this.afterAnimation();
 		}
 	},
 
 
+	beforeAnimation: function(index) {
+		var o = this.options
+		,	directionModifier = (this.direction == "left" ? 1 : 0)
+		,	$farLeftItem = this.$items.eq(this.visibleItemIndices[0])
+		,	$farRightItem = this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]);
 
+		this.isAnimating = true;
 
+		//show and hide items on the far left and right side
+		if (this.direction == "left") {
+			$farLeftItem.hide();
+			$farRightItem.show();
+		} else {
+			$farLeftItem.show();
+			$farRightItem.hide();
+		}
 
+		//prepare $itemsToAnimate
+		for (var i = 0; i < o.visibleItemCount -1; i++) {
+			this.$itemsToAnimate.push(this.$items.eq(this.visibleItemIndices[i+directionModifier]));
+		};
+	},
 
+	afterAnimation: function(index) {
+		var o = this.options
+		,	directionModifier = (this.direction == "left" ? 1 : -1);
+
+		this.isAnimating = false;
+		this.x = 0;
+		this.$itemsToAnimate = [];
+		clearTimeout(this.myTimeout);
+
+		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + directionModifier);
+		this.determineVisibleItemIndices();
+		this.adjustItemPositions();
+	},
 
 
 
