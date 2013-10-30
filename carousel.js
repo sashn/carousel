@@ -23,8 +23,8 @@ var carousel = {
 		'itemDefaultHeight': null,
 		'centerItemIndex': null,
 		'defaultCenterItemIndex': null,
-		'subPositionCount': 8,
-		'useAnimation': true
+		'subPositionCount': 10,
+		'useAnimation': false
 
 	},
 
@@ -32,7 +32,6 @@ var carousel = {
 	positionCss: [],
 	subPositionCss: [],
 	visibleItemIndices: [],
-
 
 	currentSubPosition: 0,
 	myTimeout: null,
@@ -44,11 +43,9 @@ var carousel = {
 	init: function(options) {
 		this.initConfiguration(options);
 		this.initCarouselPositionCss();
-		this.initSubPositionCss();
-		this.adjustItemPositions();
 		this.initControls();
+		this.adjustItemPositions();
 	},
-
 
 	initConfiguration: function(options) {
 		var o = this.options = $.extend({}, this.options, options);
@@ -61,73 +58,46 @@ var carousel = {
 			};
 		};
 	},
-
 	initCarouselPositionCss: function() {
-		var o = this.options
-		,	width = 0
-		,	height = 0
-		,	top = 0
-		,	left = 0
-		,	positionCss = this.positionCss
-		,	pushPositionCss = function(sizeFactor) {
-				width = sizeFactor * o.itemDefaultWidth;
-				height = sizeFactor * o.itemDefaultHeight;
-				top = (o.itemDefaultHeight - height) / 2;
-				positionCss.push({
+		var o = this.options;
+
+		for (var i = 0; i < o.visibleItemCount; i++) {
+			for (var j = 0; j < o.subPositionCount; j++) {
+				if (i == o.visibleItemCount-1 && j > 0) {
+					break;
+				}
+
+				var factor = o.visibleItemScale[i] + (i == o.visibleItemCount-1 ? 0 : (o.visibleItemScale[i+1] - o.visibleItemScale[i]) * j/o.subPositionCount)
+				,	width = o.itemDefaultWidth * factor
+				,	height = o.itemDefaultHeight * factor
+				,	top = (o.itemDefaultHeight - height) / 2
+				,	left = this.getLeftCss(i, j/o.subPositionCount);
+
+				this.positionCss.push({
 					'width': width,
 					'height': height,
 					'top': top,
 					'left': left,
-					'z-index': sizeFactor*100
+					'z-index': factor * 100
 				});
-				left += width;
 			};
-
-		for (var i = 0, visibleItemCount = o.visibleItemScale.length; i < visibleItemCount; i++) {
-			pushPositionCss(o.visibleItemScale[i]);
 		};
 	},
-
-	initSubPositionCss: function() {
+	getLeftCss: function(fullPosition, subPositionOffset) {
 		var o = this.options
-		,	width = 0
-		,	height = 0
-		,	top = 0
-		,	left = 0
-		,	cssObjects
-		,	subPositionSizeFactor;
+		,	i = 0
+		,	left = 0;
 
-		for (var i = 0; i < o.visibleItemCount-1; i++) {
-
-			width = this.positionCss[i+1].width - this.positionCss[i].width;
-			height = this.positionCss[i+1].height - this.positionCss[i].height;
-			top = this.positionCss[i+1].top - this.positionCss[i].top;
-			left = this.positionCss[i+1].left - this.positionCss[i].left;
-			zIndex = this.positionCss[i+1]['z-index'] - this.positionCss[i]['z-index'];
-
-			cssObjects = [];
-			for (var j = 0; j < o.subPositionCount; j++) {
-				subPositionSizeFactor = j/o.subPositionCount;
-				cssObjects.push({
-					'width': this.positionCss[i].width + width * subPositionSizeFactor,
-					'height': this.positionCss[i].height + height * subPositionSizeFactor,
-					'top': this.positionCss[i].top + top * subPositionSizeFactor,
-					'left': this.positionCss[i].left + left * subPositionSizeFactor,
-					'z-index': this.positionCss[i]['z-index'] + zIndex * subPositionSizeFactor
-				});
-			};
-			this.subPositionCss.push(cssObjects);
+		for (i = 0; i < fullPosition; i++) {
+			left += o.itemDefaultWidth * o.visibleItemScale[i];
 		};
+		if (subPositionOffset > 0) {
+			left += (o.itemDefaultWidth * o.visibleItemScale[i+1] - left) * subPositionOffset;
+		}
 
+		return left;
 	},
 
-	adjustItemPositions: function() {
-		this.determineVisibleItemIndices();
-		this.$items.hide();
-		for (var i = 0; i < this.options.visibleItemCount; i++) {
-			this.$items.eq(this.visibleItemIndices[i]).css(this.positionCss[i]).show();
-		};
-	},
 	initControls: function() {
 		var o = this.options
 		,	self = this
@@ -141,7 +111,6 @@ var carousel = {
 			self.cycleRight(self);
 		});
 	},
-
 	cycleLeft: function(carousel) {
 		if (this.options.useAnimation) {
 			this.direction = "right";
@@ -164,6 +133,16 @@ var carousel = {
 		this.adjustItemPositions();
 	},
 
+	adjustItemPositions: function() {
+		this.determineVisibleItemIndices();
+		this.$items.hide();
+		for (var i = 0; i < this.options.visibleItemCount; i++) {
+			this.$items.eq(this.visibleItemIndices[i]).css(this.getFullPositionCss(i)).show();
+		};
+	},
+	getFullPositionCss: function(index) {
+		return this.positionCss[index * this.options.subPositionCount];
+	},
 	determineVisibleItemIndices: function() {
 		var o = this.options;
 		
@@ -173,7 +152,6 @@ var carousel = {
 			this.visibleItemIndices.push(index);
 		};
 	},
-
 	adjustIndex: function(index) {
 		var itemCount = this.$items.length;
 
@@ -186,11 +164,7 @@ var carousel = {
 	},
 
 
-
-
-
 	animate: function() {
-
 		var o = this.options;
 
 		if (!this.isCurrentlyBeingAnimated) {
@@ -200,9 +174,9 @@ var carousel = {
 		if (this.currentSubPosition < o.subPositionCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (this.direction == "left") {
-					this.$itemsToAnimate[i].css(this.subPositionCss[i][o.subPositionCount-1 -this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.positionCss[i*o.subPositionCount - this.currentSubPosition]);
 				} else {
-					this.$itemsToAnimate[i].css(this.subPositionCss[i][this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.positionCss[i*o.subPositionCount + this.currentSubPosition]);
 				}
 			};
 			this.currentSubPosition += 1;
@@ -213,8 +187,6 @@ var carousel = {
 			this.afterAnimation();
 		}
 	},
-
-
 	beforeAnimation: function(index) {
 		var o = this.options
 		,	directionModifier = (this.direction == "left" ? 1 : 0)
@@ -237,7 +209,6 @@ var carousel = {
 			this.$itemsToAnimate.push(this.$items.eq(this.visibleItemIndices[i+directionModifier]));
 		};
 	},
-
 	afterAnimation: function(index) {
 		var o = this.options
 		,	directionModifier = (this.direction == "left" ? 1 : -1);
