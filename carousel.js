@@ -24,7 +24,7 @@ var carousel = {
 		'centerItemIndex': null,
 		'defaultCenterItemIndex': null,
 		'subPositionCount': 10,
-		'useAnimation': false
+		'useAnimation': true
 
 	},
 
@@ -33,7 +33,7 @@ var carousel = {
 	subPositionCss: [],
 	visibleItemIndices: [],
 
-	currentSubPosition: 0,
+	currentSubPosition: 1,
 	myTimeout: null,
 	$itemsToAnimate: [],
 	direction: null,
@@ -85,15 +85,17 @@ var carousel = {
 	},
 	getLeftCss: function(fullPosition, subPositionOffset) {
 		var o = this.options
-		,	i = 0
 		,	left = 0;
 
-		for (i = 0; i < fullPosition; i++) {
-			left += o.itemDefaultWidth * o.visibleItemScale[i];
+		for (i = 0; i <= fullPosition; i++) {
+			var itemWidth = o.itemDefaultWidth * o.visibleItemScale[i];
+
+			if (i == fullPosition) {
+				itemWidth *= subPositionOffset;
+			}
+
+			left += itemWidth;
 		};
-		if (subPositionOffset > 0) {
-			left += (o.itemDefaultWidth * o.visibleItemScale[i+1] - left) * subPositionOffset;
-		}
 
 		return left;
 	},
@@ -129,7 +131,6 @@ var carousel = {
 	},
 	cycleCarousel: function(delta) {
 		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + delta);
-		this.determineVisibleItemIndices();
 		this.adjustItemPositions();
 	},
 
@@ -174,7 +175,7 @@ var carousel = {
 		if (this.currentSubPosition < o.subPositionCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (this.direction == "left") {
-					this.$itemsToAnimate[i].css(this.positionCss[i*o.subPositionCount - this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.positionCss[(i+1)*o.subPositionCount - this.currentSubPosition]);
 				} else {
 					this.$itemsToAnimate[i].css(this.positionCss[i*o.subPositionCount + this.currentSubPosition]);
 				}
@@ -182,7 +183,7 @@ var carousel = {
 			this.currentSubPosition += 1;
 			this.myTimeout = setTimeout(function() {
 				carousel.animate();
-			}, 100);
+			}, 100/o.subPositionCount);
 		} else {
 			this.afterAnimation();
 		}
@@ -214,12 +215,11 @@ var carousel = {
 		,	directionModifier = (this.direction == "left" ? 1 : -1);
 
 		this.isCurrentlyBeingAnimated = false;
-		this.currentSubPosition = 0;
+		this.currentSubPosition = 1;
 		this.$itemsToAnimate = [];
 		clearTimeout(this.myTimeout);
 
 		this.options.centerItemIndex = this.adjustIndex(this.options.centerItemIndex + directionModifier);
-		this.determineVisibleItemIndices();
 		this.adjustItemPositions();
 	},
 
