@@ -17,37 +17,163 @@
 /* ... js goes here ... */
 
 
-
-
-
 $(document).ready(function() {
-	carousel.init({centerItemIndex: 0});
+
+	// for now, i want to be able to call my carousel like this:
+	// these should all work (independently from each other):
+
+	$("#myCarouselOne").sashnCarousel();
+	$("#myCarouselTwo").sashnCarousel();
+	$("#myCarouselThree").sashnCarousel();
+
+	$(".allCarousels").sashnCarousel();
+
+	// or like this ??:
+	var myCarouselOne = new SashnCarousel("#myCarouselOne");
 });
 </script>
 
 </head>
 <body>
 
-<div class="js-carousel-container" style="height: 100px;">
-	<img src="01.png" width="100" height="100" class="js-carousel-item">
-	<img src="02.png" width="100" class="js-carousel-item">
-	<img src="03.png" width="100" class="js-carousel-item">
-	<img src="04.png" width="100" class="js-carousel-item">
-	<img src="05.png" width="100" class="js-carousel-item">
-	<img src="06.png" width="100" class="js-carousel-item">
-	<img src="07.png" width="100" class="js-carousel-item">
-	<img src="08.png" width="100" class="js-carousel-item">
-	<img src="09.png" width="100" class="js-carousel-item">
-	<img src="10.png" width="100" class="js-carousel-item">
-	<img src="11.png" width="100" class="js-carousel-item">
-	<img src="12.png" width="100" class="js-carousel-item">
-	<img src="13.png" width="100" class="js-carousel-item">
-	<img src="14.png" width="100" class="js-carousel-item">
-	<img src="15.png" width="100" class="js-carousel-item">
-	<img src="16.png" width="100" class="js-carousel-item">
+<div id="myCarouselOne">
+	<div class="js-carousel-container" style="height: 100px;">
+		<img src="01.png" width="100" height="100" class="js-carousel-item">
+		<img src="02.png" width="100" class="js-carousel-item">
+		<img src="03.png" width="100" class="js-carousel-item">
+		<img src="04.png" width="100" class="js-carousel-item">
+		<img src="05.png" width="100" class="js-carousel-item">
+		<img src="06.png" width="100" class="js-carousel-item">
+		<img src="07.png" width="100" class="js-carousel-item">
+		<img src="08.png" width="100" class="js-carousel-item">
+		<img src="09.png" width="100" class="js-carousel-item">
+		<img src="10.png" width="100" class="js-carousel-item">
+		<img src="11.png" width="100" class="js-carousel-item">
+		<img src="12.png" width="100" class="js-carousel-item">
+		<img src="13.png" width="100" class="js-carousel-item">
+		<img src="14.png" width="100" class="js-carousel-item">
+		<img src="15.png" width="100" class="js-carousel-item">
+		<img src="16.png" width="100" class="js-carousel-item">
+	</div>
+	<button class="js-carousel-btn-left">left</button>
+	<button class="js-carousel-btn-right">right</button>
 </div>
-<button class="js-carousel-btn-left">left</button>
-<button class="js-carousel-btn-right">right</button>
+
+<div id="myCarouselTwo">
+	<div class="js-carousel-container" style="height: 100px;">
+		<img src="01.png" width="100" height="100" class="js-carousel-item">
+		<img src="02.png" width="100" class="js-carousel-item">
+		<img src="03.png" width="100" class="js-carousel-item">
+		<img src="04.png" width="100" class="js-carousel-item">
+		<img src="05.png" width="100" class="js-carousel-item">
+		<img src="06.png" width="100" class="js-carousel-item">
+		<img src="07.png" width="100" class="js-carousel-item">
+		<img src="08.png" width="100" class="js-carousel-item">
+		<img src="09.png" width="100" class="js-carousel-item">
+		<img src="10.png" width="100" class="js-carousel-item">
+		<img src="11.png" width="100" class="js-carousel-item">
+		<img src="12.png" width="100" class="js-carousel-item">
+		<img src="13.png" width="100" class="js-carousel-item">
+		<img src="14.png" width="100" class="js-carousel-item">
+		<img src="15.png" width="100" class="js-carousel-item">
+		<img src="16.png" width="100" class="js-carousel-item">
+	</div>
+	<button class="js-carousel-btn-left">left</button>
+	<button class="js-carousel-btn-right">right</button>
+</div>
+
+<div id="myCarouselThree">
+	<div class="js-carousel-container" style="height: 100px;">
+		<img src="01.png" width="100" height="100" class="js-carousel-item">
+		<img src="02.png" width="100" class="js-carousel-item">
+		<img src="03.png" width="100" class="js-carousel-item">
+		<img src="04.png" width="100" class="js-carousel-item">
+		<img src="05.png" width="100" class="js-carousel-item">
+		<img src="06.png" width="100" class="js-carousel-item">
+		<img src="07.png" width="100" class="js-carousel-item">
+		<img src="08.png" width="100" class="js-carousel-item">
+		<img src="09.png" width="100" class="js-carousel-item">
+		<img src="10.png" width="100" class="js-carousel-item">
+		<img src="11.png" width="100" class="js-carousel-item">
+		<img src="12.png" width="100" class="js-carousel-item">
+		<img src="13.png" width="100" class="js-carousel-item">
+		<img src="14.png" width="100" class="js-carousel-item">
+		<img src="15.png" width="100" class="js-carousel-item">
+		<img src="16.png" width="100" class="js-carousel-item">
+	</div>
+	<button class="js-carousel-btn-left">left</button>
+	<button class="js-carousel-btn-right">right</button>
+</div>
+
+<div class="allCarousels">
+	<div class="js-carousel-container" style="height: 100px;">
+		<img src="01.png" width="100" height="100" class="js-carousel-item">
+		<img src="02.png" width="100" class="js-carousel-item">
+		<img src="03.png" width="100" class="js-carousel-item">
+		<img src="04.png" width="100" class="js-carousel-item">
+		<img src="05.png" width="100" class="js-carousel-item">
+		<img src="06.png" width="100" class="js-carousel-item">
+		<img src="07.png" width="100" class="js-carousel-item">
+		<img src="08.png" width="100" class="js-carousel-item">
+		<img src="09.png" width="100" class="js-carousel-item">
+		<img src="10.png" width="100" class="js-carousel-item">
+		<img src="11.png" width="100" class="js-carousel-item">
+		<img src="12.png" width="100" class="js-carousel-item">
+		<img src="13.png" width="100" class="js-carousel-item">
+		<img src="14.png" width="100" class="js-carousel-item">
+		<img src="15.png" width="100" class="js-carousel-item">
+		<img src="16.png" width="100" class="js-carousel-item">
+	</div>
+	<button class="js-carousel-btn-left">left</button>
+	<button class="js-carousel-btn-right">right</button>
+</div>
+
+<div class="allCarousels">
+	<div class="js-carousel-container" style="height: 100px;">
+		<img src="01.png" width="100" height="100" class="js-carousel-item">
+		<img src="02.png" width="100" class="js-carousel-item">
+		<img src="03.png" width="100" class="js-carousel-item">
+		<img src="04.png" width="100" class="js-carousel-item">
+		<img src="05.png" width="100" class="js-carousel-item">
+		<img src="06.png" width="100" class="js-carousel-item">
+		<img src="07.png" width="100" class="js-carousel-item">
+		<img src="08.png" width="100" class="js-carousel-item">
+		<img src="09.png" width="100" class="js-carousel-item">
+		<img src="10.png" width="100" class="js-carousel-item">
+		<img src="11.png" width="100" class="js-carousel-item">
+		<img src="12.png" width="100" class="js-carousel-item">
+		<img src="13.png" width="100" class="js-carousel-item">
+		<img src="14.png" width="100" class="js-carousel-item">
+		<img src="15.png" width="100" class="js-carousel-item">
+		<img src="16.png" width="100" class="js-carousel-item">
+	</div>
+	<button class="js-carousel-btn-left">left</button>
+	<button class="js-carousel-btn-right">right</button>
+</div>
+
+<div class="allCarousels">
+	<div class="js-carousel-container" style="height: 100px;">
+		<img src="01.png" width="100" height="100" class="js-carousel-item">
+		<img src="02.png" width="100" class="js-carousel-item">
+		<img src="03.png" width="100" class="js-carousel-item">
+		<img src="04.png" width="100" class="js-carousel-item">
+		<img src="05.png" width="100" class="js-carousel-item">
+		<img src="06.png" width="100" class="js-carousel-item">
+		<img src="07.png" width="100" class="js-carousel-item">
+		<img src="08.png" width="100" class="js-carousel-item">
+		<img src="09.png" width="100" class="js-carousel-item">
+		<img src="10.png" width="100" class="js-carousel-item">
+		<img src="11.png" width="100" class="js-carousel-item">
+		<img src="12.png" width="100" class="js-carousel-item">
+		<img src="13.png" width="100" class="js-carousel-item">
+		<img src="14.png" width="100" class="js-carousel-item">
+		<img src="15.png" width="100" class="js-carousel-item">
+		<img src="16.png" width="100" class="js-carousel-item">
+	</div>
+	<button class="js-carousel-btn-left">left</button>
+	<button class="js-carousel-btn-right">right</button>
+</div>
+
 
 </body>
 </html>
