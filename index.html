@@ -23,11 +23,11 @@ $(document).ready(function() {
 	// for now, i want to be able to call my carousel like this:
 	// these should all work (independently from each other):
 
-	$("#myCarouselOne").sashnCarousel();
-	$("#myCarouselTwo").sashnCarousel();
-	$("#myCarouselThree").sashnCarousel();
+	$("#myCarouselOne").sashnCarousel({centerItemIndex:5});
+	$("#myCarouselTwo").sashnCarousel({centerItemIndex:9});
+	$("#myCarouselThree").sashnCarousel({centerItemIndex:11});
 
-	$(".allCarousels").sashnCarousel();
+	$(".allCarousels").sashnCarousel({centerItemIndex:3});
 
 	// or like this ??:
 	// var myCarouselOne = new SashnCarousel("#myCarouselOne");
