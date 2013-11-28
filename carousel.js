@@ -34,17 +34,16 @@
 		this.isCurrentlyBeingAnimated = false;
 		this.$items = this.$element.find(this.options.itemSelector);
 		this.positionCss = [];
-		// this.visibleItemIndices = [];
-		// this.currentSubPosition = 1;
-		// this.myTimeout = null;
-		// this.$itemsToAnimate = [];
-		// this.direction = null;
-		// this.isCurrentlyBeingAnimated = false;
+		this.visibleItemIndices = [];
+		this.currentSubPosition = 1;
+		this.myTimeout = null;
+		this.$itemsToAnimate = [];
+		this.isCurrentlyBeingAnimated = false;
 
 		this.calculateOptions();
 		this.initCarouselPositionCss();
 		this.adjustItemPositions();
-		// this.initControls();
+		this.initControls();
 	};
 
 	SashnCarousel.prototype.getOptions = function() {
@@ -146,8 +145,28 @@
 		return index;
 	},
 
+	SashnCarousel.prototype.initControls = function() {
+		var o = this.options
+		,	self = this
+		,	action = o.useAnimation ? 'animate' : 'cycle'
+		,	$btnLeft = this.$element.find(o.btnLeftSelector)
+		,	$btnRight = this.$element.find(o.btnRightSelector);
 
+		$btnLeft.click(function() {
+			self[action]('left');
+		});
+		$btnRight.click(function() {
+			self[action]('right');
+		});
+	},
 
+	SashnCarousel.prototype.cycle = function(direction) {
+		var o = this.options
+		,	delta = direction == 'left' ? -1 : 1;
+
+		o.centerItemIndex = this.adjustIndex(o.centerItemIndex + delta);
+		this.adjustItemPositions();
+	}
 
 
 
