@@ -174,8 +174,8 @@
 		//start animation
 		if (!this.isCurrentlyBeingAnimated) {
 			var directionModifier = direction == 'left' ? 1 : 0
-			,	$farLeftItem = this.$items.eq(this.visibleItemIndices[0])
-			,	$farRightItem = this.$items.eq(this.visibleItemIndices[o.visibleItemCount-1]);
+			,	$farLeftItem = this.$items.eq(this.adjustIndex(o.centerItemIndex - Math.floor(o.animatedItemCount/2)))
+			,	$farRightItem = this.$items.eq(this.adjustIndex(o.centerItemIndex + Math.floor(o.animatedItemCount/2)));
 
 			this.isCurrentlyBeingAnimated = true;
 
@@ -189,8 +189,8 @@
 			}
 
 			//prepare $itemsToAnimate
-			for (var i = 0; i < o.visibleItemCount -1; i++) {
-				this.$itemsToAnimate.push(this.$items.eq(this.visibleItemIndices[i+directionModifier]));
+			for (var i = 0; i < o.animatedItemCount -1; i++) {
+				this.$itemsToAnimate.push(this.$items.eq(this.adjustIndex(o.centerItemIndex - Math.floor(o.animatedItemCount/2) +i +directionModifier)));
 			};
 		}
 
@@ -203,9 +203,11 @@
 				}
 			};
 			this.currentSubPosition += 1;
-			this.myTimeout = setTimeout(function() {
-				carousel.animate(direction);
-			}, 100/o.subPositionCount);
+			this.myTimeout = setTimeout(function(that, direction) {
+				return function() {
+					that.animate(direction);
+				};
+			}(this, direction), 100/o.subPositionCount);
 		} else {
 			//end animation
 			var directionModifier = direction == 'left' ? 1 : -1;
