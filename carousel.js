@@ -14,7 +14,7 @@
 		'btnRightSelector': '.js-carousel-btn-right',
 
 		'visibleItemScale': [0.5, 0.7, 1.0, 0.7, 0.5],
-		'subPositionCount': 10,
+		'animationStepCount': 10,
 		'useAnimation': true,
 
 		//the following options are being calculated
@@ -25,7 +25,7 @@
 		'itemDefaultHeight': null,
 		'centerItemIndex': null,
 		'defaultCenterItemIndex': null
-	}
+	};
 
 	//SPOE =)
 	SashnCarousel.prototype.init = function(element, options) {
@@ -72,16 +72,16 @@
 		var o = this.options;
 
 		for (var i = 0; i < o.animatedItemCount; i++) {
-			for (var j = 0; j < o.subPositionCount; j++) {
+			for (var j = 0; j < o.animationStepCount; j++) {
 				if (i == o.animatedItemCount-1 && j > 0) {
 					break;
 				}
 
-				var factor = o.animatedItemScale[i] + (i == o.animatedItemCount-1 ? 0 : (o.animatedItemScale[i+1] - o.animatedItemScale[i]) * j/o.subPositionCount)
+				var factor = o.animatedItemScale[i] + (i == o.animatedItemCount-1 ? 0 : (o.animatedItemScale[i+1] - o.animatedItemScale[i]) * j/o.animationStepCount)
 				,	width = o.itemDefaultWidth * factor
 				,	height = o.itemDefaultHeight * factor
 				,	top = (o.itemDefaultHeight - height) / 2
-				,	left = this.getLeftCss(i, j/o.subPositionCount);
+				,	left = this.getLeftCss(i, j/o.animationStepCount);
 
 				this.positionCss.push({
 					'width': width,
@@ -92,7 +92,7 @@
 				});
 			};
 		};
-	},
+	};
 
 	SashnCarousel.prototype.getLeftCss = function(fullPosition, subPositionOffset) {
 		var o = this.options
@@ -109,7 +109,7 @@
 		};
 
 		return left;
-	},
+	};
 
 	SashnCarousel.prototype.adjustItemPositions = function() {
 		this.determineVisibleItemIndices();
@@ -118,11 +118,11 @@
 			//this.getFullPositionCss(i+1) <-- the +1 is needed, because this.positionCss already contains the css for the fade in/fade out (outer) item, which needs to be skipped in this situation
 			this.$items.eq(this.visibleItemIndices[i]).css(this.getFullPositionCss(i+1)).show();
 		};
-	},
+	};
 
 	SashnCarousel.prototype.getFullPositionCss = function(index) {
-		return this.positionCss[index * this.options.subPositionCount];
-	},
+		return this.positionCss[index * this.options.animationStepCount];
+	};
 
 	SashnCarousel.prototype.determineVisibleItemIndices = function() {
 		var o = this.options;
@@ -132,7 +132,7 @@
 			var index = this.adjustIndex(o.centerItemIndex + i - o.defaultCenterItemIndex);
 			this.visibleItemIndices.push(index);
 		};
-	},
+	};
 
 	SashnCarousel.prototype.adjustIndex = function(index) {
 		var itemCount = this.$items.length;
@@ -143,30 +143,21 @@
 			index -= itemCount;
 		}
 		return index;
-	},
+	};
 
 	SashnCarousel.prototype.initControls = function() {
 		var o = this.options
 		,	self = this
-		,	action = o.useAnimation ? 'animate' : 'cycle'
 		,	$btnLeft = this.$element.find(o.btnLeftSelector)
 		,	$btnRight = this.$element.find(o.btnRightSelector);
 
 		$btnLeft.click(function() {
-			self[action]('left');
+			self.animate('left');
 		});
 		$btnRight.click(function() {
-			self[action]('right');
+			self.animate('right');
 		});
-	},
-
-	SashnCarousel.prototype.cycle = function(direction) {
-		var o = this.options
-		,	delta = direction == 'left' ? -1 : 1;
-
-		o.centerItemIndex = this.adjustIndex(o.centerItemIndex + delta);
-		this.adjustItemPositions();
-	}
+	};
 
 	SashnCarousel.prototype.animate = function(direction) {
 		var o = this.options;
@@ -194,12 +185,12 @@
 			};
 		}
 
-		if (this.currentSubPosition < o.subPositionCount) {
+		if (this.currentSubPosition < o.animationStepCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (direction == 'left') {
-					this.$itemsToAnimate[i].css(this.positionCss[(i+1)*o.subPositionCount - this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.positionCss[(i+1)*o.animationStepCount - this.currentSubPosition]);
 				} else {
-					this.$itemsToAnimate[i].css(this.positionCss[i*o.subPositionCount + this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.positionCss[i*o.animationStepCount + this.currentSubPosition]);
 				}
 			};
 			this.currentSubPosition += 1;
@@ -207,7 +198,7 @@
 				return function() {
 					that.animate(direction);
 				};
-			}(this, direction), 100/o.subPositionCount);
+			}(this, direction), 100/o.animationStepCount);
 		} else {
 			//end animation
 			var directionModifier = direction == 'left' ? 1 : -1;
@@ -220,16 +211,7 @@
 			o.centerItemIndex = this.adjustIndex(o.centerItemIndex + directionModifier);
 			this.adjustItemPositions();
 		}
-	},
-
-
-
-
-
-
-
-
-
+	};
 
 
 	$.fn.sashnCarousel = function(option) {
