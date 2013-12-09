@@ -97,7 +97,7 @@
 		this.determineVisibleItemIndices();
 		this.$items.hide();
 		for (var i = 0; i < this.options.visibleItemCount; i++) {
-			//this.getPositionCss(i+1) <-- the +1 is needed, because this.positionCss already contains the css for the fade in/fade out (outer) item, which needs to be skipped in this situation
+			//this.getPositionCss(i+1) <-- the +1 is needed, because this.getPositionCss already returns the css for the fade in/fade out (outer) item, which needs to be skipped in this situation
 			this.$items.eq(this.visibleItemIndices[i]).css(this.getPositionCss(i+1)).show();
 		};
 	};
@@ -166,9 +166,9 @@
 		if (this.currentSubPosition < o.animationStepCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (direction == 'left') {
-					this.$itemsToAnimate[i].css(this.positionCss[(i+1)*o.animationStepCount - this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.getPositionCss(i+1, o.animationStepCount-this.currentSubPosition));
 				} else {
-					this.$itemsToAnimate[i].css(this.positionCss[i*o.animationStepCount + this.currentSubPosition]);
+					this.$itemsToAnimate[i].css(this.getPositionCss(i, this.currentSubPosition));
 				}
 			};
 			this.currentSubPosition += 1;
