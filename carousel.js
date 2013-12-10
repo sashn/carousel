@@ -142,7 +142,7 @@
 
 		//start animation
 		if (!this.isCurrentlyBeingAnimated) {
-			var directionModifier = direction == 'left' ? 1 : 0
+			var directionModifier = direction == 'left' ? 0 : 1
 			,	$farLeftItem = this.$items.eq(this.adjustIndex(o.centerItemIndex - Math.floor(o.animatedItemCount/2)))
 			,	$farRightItem = this.$items.eq(this.adjustIndex(o.centerItemIndex + Math.floor(o.animatedItemCount/2)));
 
@@ -150,11 +150,11 @@
 
 			//show and hide items on the far left and right side
 			if (direction == 'left') {
-				$farLeftItem.hide();
-				$farRightItem.show();
-			} else {
 				$farLeftItem.show();
 				$farRightItem.hide();
+			} else {
+				$farLeftItem.hide();
+				$farRightItem.show();
 			}
 
 			//prepare $itemsToAnimate
@@ -166,9 +166,9 @@
 		if (this.currentSubPosition < o.animationStepCount) {
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (direction == 'left') {
-					this.$itemsToAnimate[i].css(this.getPositionCss(i+1, o.animationStepCount-this.currentSubPosition));
-				} else {
 					this.$itemsToAnimate[i].css(this.getPositionCss(i, this.currentSubPosition));
+				} else {
+					this.$itemsToAnimate[i].css(this.getPositionCss(i, o.animationStepCount-this.currentSubPosition));
 				}
 			};
 			this.currentSubPosition += 1;
@@ -179,7 +179,7 @@
 			}(this, direction), 100/o.animationStepCount);
 		} else {
 			//end animation
-			var directionModifier = direction == 'left' ? 1 : -1;
+			var directionModifier = direction == 'left' ? -1 : 1;
 
 			this.isCurrentlyBeingAnimated = false;
 			this.currentSubPosition = 1;
