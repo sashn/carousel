@@ -14,7 +14,7 @@
 		'btnRightSelector': '.js-carousel-btn-right',
 
 		'visibleItemScale': [0.5, 0.7, 1.0, 0.7, 0.5],
-		'animationStepCount': 10,
+		'animationStepCount': 100,
 		'useAnimation': true,
 
 		//the following options are being calculated
@@ -35,6 +35,7 @@
 		this.$items = this.$element.find(this.options.itemSelector);
 		this.visibleItemIndices = [];
 		this.currentSubPosition = 1;
+		this.distanceToAnimate = 0;
 		this.myTimeout = null;
 		this.$itemsToAnimate = [];
 		this.isCurrentlyBeingAnimated = false;
@@ -130,18 +131,25 @@
 		,	$btnRight = this.$element.find(o.btnRightSelector);
 
 		$btnLeft.click(function() {
-			self.animate('left');
+			self.distanceToAnimate -= 1;
+			if (!self.isCurrentlyBeingAnimated) {
+				self.animationLoop('left');
+			}
 		});
 		$btnRight.click(function() {
-			self.animate('right');
+			self.distanceToAnimate += 1;
+			if (!self.isCurrentlyBeingAnimated) {
+				self.animationLoop('right');
+			}
 		});
 	};
 
-	SashnCarousel.prototype.animate = function(direction) {
+	SashnCarousel.prototype.animationLoop = function(direction) {
 		var o = this.options;
-
-		//start animation
+		
 		if (!this.isCurrentlyBeingAnimated) {
+			//start animation
+
 			var directionModifier = direction == 'left' ? 0 : 1
 			,	$farLeftItem = this.$items.eq(this.adjustIndex(o.centerItemIndex - Math.floor(o.animatedItemCount/2)))
 			,	$farRightItem = this.$items.eq(this.adjustIndex(o.centerItemIndex + Math.floor(o.animatedItemCount/2)));
@@ -163,7 +171,8 @@
 			};
 		}
 
-		if (this.currentSubPosition < o.animationStepCount) {
+		if (this.currentSubPosition <= o.animationStepCount) {
+			//animationLoop
 			for (var i = 0; i < this.$itemsToAnimate.length; i++) {
 				if (direction == 'left') {
 					this.$itemsToAnimate[i].css(this.getPositionCss(i, this.currentSubPosition));
@@ -174,20 +183,32 @@
 			this.currentSubPosition += 1;
 			this.myTimeout = setTimeout(function(that, direction) {
 				return function() {
-					that.animate(direction);
+					that.animationLoop(direction);
 				};
-			}(this, direction), 100/o.animationStepCount);
+			}(this, direction), 1000/o.animationStepCount);
 		} else {
 			//end animation
-			var directionModifier = direction == 'left' ? -1 : 1;
-
 			this.isCurrentlyBeingAnimated = false;
 			this.currentSubPosition = 1;
 			this.$itemsToAnimate = [];
 			clearTimeout(this.myTimeout);
 
-			o.centerItemIndex = this.adjustIndex(o.centerItemIndex + directionModifier);
+			if (direction == 'left') {
+				this.distanceToAnimate += 1;
+				o.centerItemIndex = this.adjustIndex(o.centerItemIndex -1);
+			} else {
+				this.distanceToAnimate -= 1;
+				o.centerItemIndex = this.adjustIndex(o.centerItemIndex +1);
+			}
 			this.adjustItemPositions();
+
+			//start new animation
+			if (this.distanceToAnimate < 0) {
+				this.animationLoop('left');
+			}
+			if (this.distanceToAnimate > 0) {
+				this.animationLoop('right');
+			}
 		}
 	};
 
