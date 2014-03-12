@@ -14,166 +14,41 @@
 <!-- <script src="http://code.jquery.com/jquery-1.7.1.js" type="text/javascript"></script> -->
 <script src="jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="carousel.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 /* ... js goes here ... */
 
-
 $(document).ready(function() {
-
-	// for now, i want to be able to call my carousel like this:
-	// these should all work (independently from each other):
-
-	$("#myCarouselOne").sashnCarousel({centerItemIndex:5});
-	$("#myCarouselTwo").sashnCarousel({centerItemIndex:9});
-	$("#myCarouselThree").sashnCarousel({centerItemIndex:11});
-
-	$(".allCarousels").sashnCarousel({centerItemIndex:3});
-
-	// or like this ??:
-	// var myCarouselOne = new SashnCarousel("#myCarouselOne");
+	$("#myCarouselOne").scrollableTabs();
 });
+
 </script>
 
 </head>
 <body>
 
-<div id="myCarouselOne">
-	<div class="js-carousel-container" style="height: 100px;">
-		<img src="01.png" width="100" height="100" class="js-carousel-item">
-		<img src="02.png" width="100" class="js-carousel-item">
-		<img src="03.png" width="100" class="js-carousel-item">
-		<img src="04.png" width="100" class="js-carousel-item">
-		<img src="05.png" width="100" class="js-carousel-item">
-		<img src="06.png" width="100" class="js-carousel-item">
-		<img src="07.png" width="100" class="js-carousel-item">
-		<img src="08.png" width="100" class="js-carousel-item">
-		<img src="09.png" width="100" class="js-carousel-item">
-		<img src="10.png" width="100" class="js-carousel-item">
-		<img src="11.png" width="100" class="js-carousel-item">
-		<img src="12.png" width="100" class="js-carousel-item">
-		<img src="13.png" width="100" class="js-carousel-item">
-		<img src="14.png" width="100" class="js-carousel-item">
-		<img src="15.png" width="100" class="js-carousel-item">
-		<img src="16.png" width="100" class="js-carousel-item">
-	</div>
-	<button class="js-carousel-btn-left">left</button>
-	<button class="js-carousel-btn-right">right</button>
-</div>
-
-<div id="myCarouselTwo">
-	<div class="js-carousel-container" style="height: 100px;">
-		<img src="01.png" width="100" height="100" class="js-carousel-item">
-		<img src="02.png" width="100" class="js-carousel-item">
-		<img src="03.png" width="100" class="js-carousel-item">
-		<img src="04.png" width="100" class="js-carousel-item">
-		<img src="05.png" width="100" class="js-carousel-item">
-		<img src="06.png" width="100" class="js-carousel-item">
-		<img src="07.png" width="100" class="js-carousel-item">
-		<img src="08.png" width="100" class="js-carousel-item">
-		<img src="09.png" width="100" class="js-carousel-item">
-		<img src="10.png" width="100" class="js-carousel-item">
-		<img src="11.png" width="100" class="js-carousel-item">
-		<img src="12.png" width="100" class="js-carousel-item">
-		<img src="13.png" width="100" class="js-carousel-item">
-		<img src="14.png" width="100" class="js-carousel-item">
-		<img src="15.png" width="100" class="js-carousel-item">
-		<img src="16.png" width="100" class="js-carousel-item">
-	</div>
-	<button class="js-carousel-btn-left">left</button>
-	<button class="js-carousel-btn-right">right</button>
-</div>
-
-<div id="myCarouselThree">
-	<div class="js-carousel-container" style="height: 100px;">
-		<img src="01.png" width="100" height="100" class="js-carousel-item">
-		<img src="02.png" width="100" class="js-carousel-item">
-		<img src="03.png" width="100" class="js-carousel-item">
-		<img src="04.png" width="100" class="js-carousel-item">
-		<img src="05.png" width="100" class="js-carousel-item">
-		<img src="06.png" width="100" class="js-carousel-item">
-		<img src="07.png" width="100" class="js-carousel-item">
-		<img src="08.png" width="100" class="js-carousel-item">
-		<img src="09.png" width="100" class="js-carousel-item">
-		<img src="10.png" width="100" class="js-carousel-item">
-		<img src="11.png" width="100" class="js-carousel-item">
-		<img src="12.png" width="100" class="js-carousel-item">
-		<img src="13.png" width="100" class="js-carousel-item">
-		<img src="14.png" width="100" class="js-carousel-item">
-		<img src="15.png" width="100" class="js-carousel-item">
-		<img src="16.png" width="100" class="js-carousel-item">
-	</div>
-	<button class="js-carousel-btn-left">left</button>
-	<button class="js-carousel-btn-right">right</button>
-</div>
-
-<div class="allCarousels">
-	<div class="js-carousel-container" style="height: 100px;">
-		<img src="01.png" width="100" height="100" class="js-carousel-item">
-		<img src="02.png" width="100" class="js-carousel-item">
-		<img src="03.png" width="100" class="js-carousel-item">
-		<img src="04.png" width="100" class="js-carousel-item">
-		<img src="05.png" width="100" class="js-carousel-item">
-		<img src="06.png" width="100" class="js-carousel-item">
-		<img src="07.png" width="100" class="js-carousel-item">
-		<img src="08.png" width="100" class="js-carousel-item">
-		<img src="09.png" width="100" class="js-carousel-item">
-		<img src="10.png" width="100" class="js-carousel-item">
-		<img src="11.png" width="100" class="js-carousel-item">
-		<img src="12.png" width="100" class="js-carousel-item">
-		<img src="13.png" width="100" class="js-carousel-item">
-		<img src="14.png" width="100" class="js-carousel-item">
-		<img src="15.png" width="100" class="js-carousel-item">
-		<img src="16.png" width="100" class="js-carousel-item">
-	</div>
-	<button class="js-carousel-btn-left">left</button>
-	<button class="js-carousel-btn-right">right</button>
-</div>
-
-<div class="allCarousels">
-	<div class="js-carousel-container" style="height: 100px;">
-		<img src="01.png" width="100" height="100" class="js-carousel-item">
-		<img src="02.png" width="100" class="js-carousel-item">
-		<img src="03.png" width="100" class="js-carousel-item">
-		<img src="04.png" width="100" class="js-carousel-item">
-		<img src="05.png" width="100" class="js-carousel-item">
-		<img src="06.png" width="100" class="js-carousel-item">
-		<img src="07.png" width="100" class="js-carousel-item">
-		<img src="08.png" width="100" class="js-carousel-item">
-		<img src="09.png" width="100" class="js-carousel-item">
-		<img src="10.png" width="100" class="js-carousel-item">
-		<img src="11.png" width="100" class="js-carousel-item">
-		<img src="12.png" width="100" class="js-carousel-item">
-		<img src="13.png" width="100" class="js-carousel-item">
-		<img src="14.png" width="100" class="js-carousel-item">
-		<img src="15.png" width="100" class="js-carousel-item">
-		<img src="16.png" width="100" class="js-carousel-item">
-	</div>
-	<button class="js-carousel-btn-left">left</button>
-	<button class="js-carousel-btn-right">right</button>
-</div>
-
-<div class="allCarousels">
-	<div class="js-carousel-container" style="height: 100px;">
-		<img src="01.png" width="100" height="100" class="js-carousel-item">
-		<img src="02.png" width="100" class="js-carousel-item">
-		<img src="03.png" width="100" class="js-carousel-item">
-		<img src="04.png" width="100" class="js-carousel-item">
-		<img src="05.png" width="100" class="js-carousel-item">
-		<img src="06.png" width="100" class="js-carousel-item">
-		<img src="07.png" width="100" class="js-carousel-item">
-		<img src="08.png" width="100" class="js-carousel-item">
-		<img src="09.png" width="100" class="js-carousel-item">
-		<img src="10.png" width="100" class="js-carousel-item">
-		<img src="11.png" width="100" class="js-carousel-item">
-		<img src="12.png" width="100" class="js-carousel-item">
-		<img src="13.png" width="100" class="js-carousel-item">
-		<img src="14.png" width="100" class="js-carousel-item">
-		<img src="15.png" width="100" class="js-carousel-item">
-		<img src="16.png" width="100" class="js-carousel-item">
-	</div>
-	<button class="js-carousel-btn-left">left</button>
-	<button class="js-carousel-btn-right">right</button>
-</div>
+<ul id="myCarouselOne">
+    <li>Waschtischarmaturen</li>
+    <li>Wannen- & Duscharmaturen</li>
+    <li>Spültischarmaturen</li>
+    <li>Dusch-Sets</li>
+    <li>Handtuchhalter</li>
+    <li>Ablagen</li>
+    <li>Bademantelhaken</li>
+    <li>Bidetarmaturen</li>
+    <li>Brausehalter & -stangen</li>
+    <li>Handtuchhaken</li>
+    <li>Handtuchringe</li>
+    <li>Kopfbrausen</li>
+    <li>Multifunktionsduschen</li>
+    <li>Reservepapierhalter</li>
+    <li>Seifenschalen</li>
+    <li>Seifenspender</li>
+    <li>Toilettenpapierhalter</li>
+    <li>WC-Bürstengarnituren</li>
+    <li>Zahnputzbecher</li>
+    <li>für Badarmaturen</li>
+</ul>
 
 
 </body>

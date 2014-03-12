@@ -1,13 +1,20 @@
 
-.js-carousel-container {
+.scrollable-tabs-outer-container {
+	overflow: hidden;
 	position: relative;
 }
-.js-carousel-item {
-	position: absolute;
+.scrollable-tabs-inner-container {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 3000px;
 }
-
-
-
+.scrollable-tabs-item {
+	float: left;
+	padding: 5px 10px;
+	border: 1px solid silver;
+}
 
 
 
