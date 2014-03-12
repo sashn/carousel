@@ -16,6 +16,10 @@
 	border: 1px solid silver;
 }
 .scrollable-tabs-button-prev {
+	float: left;
+}
+.scrollable-tabs-button-next {
+	float: right;
 }
 
 

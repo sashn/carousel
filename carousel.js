@@ -44,6 +44,7 @@
 
 		markup += '<div' + containerId + ' class="scrollable-tabs-container' + containerClasses + '">';
 		markup += '<button class="scrollable-tabs-button-prev">prev</button>';
+		markup += '<button class="scrollable-tabs-button-next">next</button>';
 		markup += '<div class="scrollable-tabs-viewport">';
 		markup += '<ul class="scrollable-tabs-items-container">';
 		for (var i = 0, itemCount = $items.length; i < itemCount; i++) {
@@ -52,7 +53,7 @@
 		markup += '<div style="clear:both;"></div>';
 		markup += '</ul>';
 		markup += '</div>';
-		markup += '<button class="scrollable-tabs-button-next">next</button>';
+		markup += '<div style="clear:both;"></div>';
 		markup += '</div>';
 
 		$(element).replaceWith(markup);
