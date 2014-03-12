@@ -1,9 +1,9 @@
 
-.scrollable-tabs-outer-container {
+.scrollable-tabs-viewport {
 	overflow: hidden;
 	position: relative;
 }
-.scrollable-tabs-inner-container {
+.scrollable-tabs-items-container {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -15,7 +15,8 @@
 	padding: 5px 10px;
 	border: 1px solid silver;
 }
-
+.scrollable-tabs-button-prev {
+}
 
 
 

@@ -14,18 +14,8 @@
 	ScrollableTabs.prototype.init = function(element, options) {
 
 		this.options = $.extend({}, ScrollableTabs.DEFAULTS, options);
+		this.prepareMarkup(element);
 
-		this.$innerContainer = $(element).wrap('<div class="scrollable-tabs-outer-container"></div>');
-		this.$outerContainer = $('.scrollable-tabs-outer-container');
-		this.$items = this.$innerContainer.children();
-
-		this.$innerContainer.append('<div style="clear:both;"></div>');
-
-		this.$innerContainer.addClass('scrollable-tabs-inner-container');
-		this.$items.addClass('scrollable-tabs-item');
-
-		this.calculateOptions();
-		this.initControls();
 	};
 
 	ScrollableTabs.prototype.calculateOptions = function() {
@@ -46,7 +36,26 @@
 		// }
 	};
 
-	ScrollableTabs.prototype.initControls = function() {
+	ScrollableTabs.prototype.prepareMarkup = function(element) {
+		var markup = ''
+		,	containerId = $(element).attr('id') != undefined ? ' id="' + $(element).attr('id') + '"' : ''
+		,	containerClasses = $(element).attr('class') != undefined ? ' ' + $(element).attr('class') + '"' : ''
+		,	$items = $(element).children();
+
+		markup += '<div' + containerId + ' class="scrollable-tabs-container' + containerClasses + '">';
+		markup += '<button class="scrollable-tabs-button-prev">prev</button>';
+		markup += '<div class="scrollable-tabs-viewport">';
+		markup += '<ul class="scrollable-tabs-items-container">';
+		for (var i = 0, itemCount = $items.length; i < itemCount; i++) {
+			markup += '<li class="scrollable-tabs-item">' + $items.eq(i).html() + '</li>';
+		};
+		markup += '<div style="clear:both;"></div>';
+		markup += '</ul>';
+		markup += '</div>';
+		markup += '<button class="scrollable-tabs-button-next">next</button>';
+		markup += '</div>';
+
+		$(element).replaceWith(markup);
 	};
 
 	ScrollableTabs.prototype.initControls = function() {
