@@ -25,7 +25,7 @@
 
 		// buttons
 		this.$container.append($('<button class="scrollable-tabs-button-left">prev</button>'));
-		this.$container.append($('<button class="scrollable-tabs-button-right">prev</button>'));
+		this.$container.append($('<button class="scrollable-tabs-button-right">next</button>'));
 		this.$btnLeft = this.$container.find('.scrollable-tabs-button-left');
 		this.$btnRight = this.$container.find('.scrollable-tabs-button-right');
 
@@ -48,11 +48,22 @@
 	};
 
 	ScrollableTabs.prototype.initControls = function() {
-		// var self = this;
+		var self = this;
 
-		// this.$btnRight.click(function() {
-		// 	self.next();
-		// });
+		this.$btnRight.click(function() {
+			self.next();
+		});
+		this.$btnLeft.click(function() {
+			self.previous();
+		});
+	};
+
+	ScrollableTabs.prototype.next = function() {
+		this.$itemsContainer.css({'left': parseInt(this.$itemsContainer.css('left')) - 100});
+	};
+
+	ScrollableTabs.prototype.previous = function() {
+		this.$itemsContainer.css({'left': parseInt(this.$itemsContainer.css('left')) + 100});
 	};
 
 	$.fn.scrollableTabs = function(option) {
