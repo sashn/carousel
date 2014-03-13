@@ -15,10 +15,10 @@
 	padding: 5px 10px;
 	border: 1px solid silver;
 }
-.scrollable-tabs-button-prev {
+.scrollable-tabs-button-left {
 	float: left;
 }
-.scrollable-tabs-button-next {
+.scrollable-tabs-button-right {
 	float: right;
 }
 

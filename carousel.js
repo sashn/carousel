@@ -12,54 +12,47 @@
 
 	//SPOE =)
 	ScrollableTabs.prototype.init = function(element, options) {
-
+		this.$container = $(element).addClass('scrollable-tabs-container');
 		this.options = $.extend({}, ScrollableTabs.DEFAULTS, options);
-		this.prepareMarkup(element);
 
-	};
+		// save items, then empty container
+		if (this.$container.find('.scrollable-tabs-item').length > 0) {
+			var $tempItems = this.$container.find('.scrollable-tabs-item');
+		} else {
+			var $tempItems = this.$container.find('ul li');
+		}
+		this.$container.empty();
 
-	ScrollableTabs.prototype.calculateOptions = function() {
-		// var o = this.options;
+		// buttons
+		this.$container.append($('<button class="scrollable-tabs-button-left">prev</button>'));
+		this.$container.append($('<button class="scrollable-tabs-button-right">prev</button>'));
+		this.$btnLeft = this.$container.find('.scrollable-tabs-button-left');
+		this.$btnRight = this.$container.find('.scrollable-tabs-button-right');
 
-		// //add one item before and after the visible items. those are needed for fade in/fade out of the outer items during animation
-		// o.animatedItemScale = $.merge($.merge([0], o.visibleItemScale), [0]);
+		// viewport
+		this.$container.append($('<div class="scrollable-tabs-viewport"></div>'));
+		this.$viewport = this.$container.find('.scrollable-tabs-viewport');
 
-		// o.animatedItemCount = o.animatedItemScale.length;
-		// o.visibleItemCount = o.visibleItemScale.length;
-
-		// o.itemDefaultWidth = this.$items.eq(0).width();
-		// o.itemDefaultHeight = this.$items.eq(0).height();
-
-		// o.defaultCenterItemIndex = Math.floor(o.visibleItemCount/2);
-		// if(!o.centerItemIndex) {
-		// 	o.centerItemIndex = o.defaultCenterItemIndex;
-		// }
-	};
-
-	ScrollableTabs.prototype.prepareMarkup = function(element) {
-		var markup = ''
-		,	containerId = $(element).attr('id') != undefined ? ' id="' + $(element).attr('id') + '"' : ''
-		,	containerClasses = $(element).attr('class') != undefined ? ' ' + $(element).attr('class') + '"' : ''
-		,	$items = $(element).children();
-
-		markup += '<div' + containerId + ' class="scrollable-tabs-container' + containerClasses + '">';
-		markup += '<button class="scrollable-tabs-button-prev">prev</button>';
-		markup += '<button class="scrollable-tabs-button-next">next</button>';
-		markup += '<div class="scrollable-tabs-viewport">';
-		markup += '<ul class="scrollable-tabs-items-container">';
-		for (var i = 0, itemCount = $items.length; i < itemCount; i++) {
-			markup += '<li class="scrollable-tabs-item">' + $items.eq(i).html() + '</li>';
+		// items
+		this.$viewport.append($('<ul class="scrollable-tabs-items-container"></ul>'));
+		this.$itemsContainer = this.$container.find('.scrollable-tabs-items-container');
+		for (var i = 0, itemCount = $tempItems.length; i < itemCount; i++) {
+			this.$itemsContainer.append($('<li class="scrollable-tabs-item">' + $tempItems.eq(i).html() + '</li>'));
 		};
-		markup += '<div style="clear:both;"></div>';
-		markup += '</ul>';
-		markup += '</div>';
-		markup += '<div style="clear:both;"></div>';
-		markup += '</div>';
 
-		$(element).replaceWith(markup);
+		// clearfixes
+		this.$container.append($('<div style="clear:both;"></div>'));
+		this.$itemsContainer.append($('<div style="clear:both;"></div>'));
+
+		this.initControls();
 	};
 
 	ScrollableTabs.prototype.initControls = function() {
+		// var self = this;
+
+		// this.$btnRight.click(function() {
+		// 	self.next();
+		// });
 	};
 
 	$.fn.scrollableTabs = function(option) {
