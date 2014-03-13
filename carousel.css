@@ -1,4 +1,7 @@
 
+.scrollable-tabs-container {
+	position: relative;
+}
 .scrollable-tabs-viewport {
 	overflow: hidden;
 	position: relative;
@@ -8,17 +11,26 @@
 	margin: 0;
 	padding: 0;
 	position: relative;
+
+	background-color: #EFEFEF;
+	border: 1px solid #454545;
 }
 .scrollable-tabs-item {
 	float: left;
 	padding: 5px 10px;
-	border: 1px solid silver;
+
+	font: 12px Arial;
+	color: #454545;
 }
 .scrollable-tabs-button-left {
-	float: left;
+	position: absolute;
+	left: 0;
+
+
 }
 .scrollable-tabs-button-right {
-	float: right;
+	position: absolute;
+	right: 0;
 }
 
 
