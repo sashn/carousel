@@ -9,12 +9,13 @@
 
 	//SPOE =)
 	ScrollableTabs.prototype.init = function(element, options) {
-		this.$container = $(element).addClass('scrollable-tabs-container');
+		this.$container = $(element);
 
 		this.initMarkup();
 		this.initVariables();
 		this.initItemsContainerWidth();
 		this.initControls();
+		this.initButtons();
 	};
 
 	/**
@@ -22,21 +23,26 @@
 	 */
 	ScrollableTabs.prototype.initMarkup = function() {
 		var markup = ''
-		,	$tempItems = this.$container.find('ul li');
+		,	$itemsContainer = this.$container.find('ul')
+		,	$items = this.$container.find('ul li');
 
-		markup += '<button class="scrollable-tabs-button-left">prev</button>';
-		markup += '<button class="scrollable-tabs-button-right">next</button>';
-		markup += '<div class="scrollable-tabs-viewport">';
-		markup += '<ul class="scrollable-tabs-items-container">';
-		for (var i = 0, itemCount = $tempItems.length; i < itemCount; i++) {
-			markup += '<li class="scrollable-tabs-item">' + $tempItems.eq(i).html() + '</li>';
-		};
-		markup += '<div style="clear:both;"></div>';
-		markup += '</ul>';
-		markup += '</div>';
-		markup += '<div style="clear:both;"></div>';
+		// adding classes to existing markup
+		this.$container.addClass('scrollable-tabs-container');
+		$itemsContainer.addClass('scrollable-tabs-items-container scrollable-tabs-clearfix');
+		$items.addClass('scrollable-tabs-item');
 
+		// adding needed markup
+		markup += '<button class="scrollable-tabs-button-left"><</button>';
+		markup += '<button class="scrollable-tabs-button-right">></button>';
+		markup += '<div class="scrollable-tabs-viewport"></div>';
+
+		// putting it together
 		this.$container.html(markup);
+		$itemsContainer.appendTo(this.$container.find('.scrollable-tabs-viewport'));
+
+		// transferring padding from items container to viewport
+		this.$container.find('.scrollable-tabs-viewport').css({'margin-left': parseInt($itemsContainer.css('padding-left'))});
+		$itemsContainer.css({'padding-left': 0});
 	};
 	ScrollableTabs.prototype.initVariables = function() {
 		this.$btnLeft = this.$container.find('.scrollable-tabs-button-left');
@@ -64,6 +70,18 @@
 			self.previous();
 		});
 	};
+	ScrollableTabs.prototype.initButtons = function() {
+		this.$btnRight.hide();
+		this.$btnLeft.hide();
+		
+		if (this.getItemsContainerOffset() > 0) { //if is not at beginning
+			this.$btnLeft.show();
+		}
+
+		if (this.$itemsContainer.width() > this.$viewport.width() && !this.lastItemReached()) { //if items container is wider than viewport and is not at end
+			this.$btnRight.show();
+		}
+	};
 
 	/**
 	 * public functions
@@ -80,6 +98,7 @@
 		} else {
 			this.applyOffset(nextItemOffset);
 		}
+		this.initButtons();
 	};
 
 	ScrollableTabs.prototype.previous = function() {
@@ -90,6 +109,7 @@
 		var previousItemOffset = this.$items.eq(this.getCurrentItemIndex() - 1).position().left;
 
 		this.applyOffset(previousItemOffset);
+		this.initButtons();
 	};
 
 	/**
