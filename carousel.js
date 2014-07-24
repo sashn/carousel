@@ -146,7 +146,7 @@
 		this.applyOffset(itemsContainerWidth - viewportWidth);
 	};
 
-	ScrollableTabs.prototype.applyOffset = function(offset) {
+	ScrollableTabs.prototype.applyOffset = function(offset) {   
 		this.$itemsContainer.css({'left': - offset});
 	};
 
